@@ -11,7 +11,7 @@ const UsersView = () => {
   async function loadData() {
     // following is the template for getting fake data
     var data = {
-      "token": "rQL40mpcvdw_7HCVhbX-2w",
+      "token": process.env.REACT_APP_FAKEJSON_ACCESS_TOKEN,
       "data": {
         "name": "nameFirst",
         "age": "numberInt|16,60",
@@ -31,14 +31,15 @@ const UsersView = () => {
       data: JSON.stringify(data),
     }
 
-    const resonse = await axios(config); 
-    const fakeUsers = resonse.data;
-    config.url = "http://localhost:3000/users/create";
+    const response = await axios(config); 
+    const fakeUsers = response.data;
+
+    config.url = process.env.REACT_APP_SERVER_URL+"/users/create";
     config.method = "POST";
     console.log(fakeUsers)
     for(var user of fakeUsers) {
         config.data = user;
-        console.log(config);
+        // console.log(config);
         await axios(config);
     }
   }
@@ -47,7 +48,7 @@ const UsersView = () => {
     //ComponentDidMount
     // loadData();  //load initial data
     var config = {
-      url: "http://localhost:3000/users",
+      url: process.env.REACT_APP_SERVER_URL+"/users",
       method: "GET",
       headers: { 
         "content-type": "application/json"
@@ -69,7 +70,7 @@ const UsersView = () => {
 
   let handleDelete = (id) => {
     let config = {
-      url: info.url+"/users/"+id,
+      url: process.env.REACT_APP_SERVER_URL+"/users/"+id,
       method: "DELETE",
       headers: {
         "content-type": "application/json"

@@ -10,7 +10,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     let config = {
-      url: "http://localhost:3000/users/"+userId,
+      url: process.env.REACT_APP_SERVER_URL+"/users/"+userId,
       method: "GET",
       headers: {
         "content-type": "application/json"

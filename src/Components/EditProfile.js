@@ -13,7 +13,7 @@ const EditProfile = () => {
   useEffect(() => {
     // get user data from server
     let config = {
-      url: info.url+"/users/"+userId,
+      url: process.env.REACT_APP_SERVER_URL+"/users/"+userId,
       method: "GET",
       headers: {
         "content-type": "application/json"
@@ -43,7 +43,7 @@ const EditProfile = () => {
           targetURL -> The URL to be hit for saving data
           nextURL -> redirect to this URL after submission of form
         */}
-        <UserForm userData={user} submitMethod={"PUT"} targetURL={info.url + "/users/" + userId} nextURL={"/users/view/"+userId}/>
+        <UserForm userData={user} submitMethod={"PUT"} targetURL={process.env.REACT_APP_SERVER_URL+ + "/users/" + userId} nextURL={"/users/view/"+userId}/>
       </div>
     </>
   );
