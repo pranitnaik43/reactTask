@@ -9,9 +9,9 @@ const Nav = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
-            <NavLink className="nav-link" to="/home">Users</NavLink>
+            <NavLink className="nav-link" to="/users">Users</NavLink>
             <NavLink className="nav-link" to="/create">Create</NavLink>
-            <NavLink className="nav-link" to="/edit">Edit</NavLink>
+            <NavLink className="nav-link" to="/about">About</NavLink>
           </ul>
         </div>
       </nav>

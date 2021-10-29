@@ -1,26 +1,23 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { UsersContext } from "../context";
+import { useHistory } from "react-router";
+import info from "../info";
 
 const UsersView = () => {
 
   const [users, setUsers] = useState(null);
-  const usersContext = useContext(UsersContext);
+  const history = useHistory();
 
-  useEffect(() => {
-    //ComponentDidMount
-
+  async function loadData() {
     // following is the template for getting fake data
     var data = {
-      "token": "rQL40mpcvdw_7HCVhbX-2w",
+      "token": process.env.REACT_APP_FAKEJSON_ACCESS_TOKEN,
       "data": {
-        "id": "cryptoUUID",
-        "first_name": "nameFirst",
-        "last_name": "nameLast",
-        "personGender": "personGender",
+        "name": "nameFirst",
+        "age": "numberInt|16,60",
+        "gender": "personGender",
         "email": "internetEmail",
-        "mobile": "phoneMobile",
+        "phone": "phoneMobile",
         "_repeat": 5
       }
     }
@@ -34,32 +31,98 @@ const UsersView = () => {
       data: JSON.stringify(data),
     }
 
-    // axios(config).then(response => {
-    //   // console.log(response);
-    //   if(response) {
-    //     console.log(response.data);
-    //     usersContext.data = response.data;
-    //     localStorage.setItem("data", JSON.stringify(response.data));
-    //   }
-    // });
-    console.log(localStorage.getItem("data"));
-    usersContext.data = JSON.parse(localStorage.getItem("data"));
-    setUsers(usersContext.data);
+    const response = await axios(config); 
+    const fakeUsers = response.data;
+
+    config.url = process.env.REACT_APP_SERVER_URL+"/users/create";
+    config.method = "POST";
+    console.log(fakeUsers)
+    for(var user of fakeUsers) {
+        config.data = user;
+        // console.log(config);
+        await axios(config);
+    }
+  }
+
+  useEffect(() => {
+    //ComponentDidMount
+    // loadData();  //load initial data
+    var config = {
+      url: process.env.REACT_APP_SERVER_URL+"/users",
+      method: "GET",
+      headers: { 
+        "content-type": "application/json"
+      }
+    }
+    axios(config).then(response => {
+      let usersData = response.data;
+      setUsers(usersData.reverse());
+    })
   }, []);
+
+  let goToProfilePage = (id) => {
+    history.push("/users/view/"+id);
+  }
+
+  let goToEditPage = (id) => {
+    history.push("/users/edit/"+id);
+  }
+
+  let handleDelete = (id) => {
+    let config = {
+      url: process.env.REACT_APP_SERVER_URL+"/users/"+id,
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json"
+      }
+    }
+    axios(config).then(response => {
+      if(response.data.error) {
+        console.log(response.data.error);
+      }
+      else if(response.data.success) {
+        console.log(response.data.success);
+      }
+    });
+    let newUsers = users.filter(user => (user._id !== id));
+    setUsers([...newUsers]);
+  }
 
   return (
     <>
-      { console.log("abc",usersContext.data) }
-      <div className="col-lg-3 col-md-4 col-sm-5">
-        <ul className="list-group m-4">
-          {
-            (users) ? (
-              users.map(user => (
-                <Link className="list-group-item" to={"/profile/"+user.id} key={user.id}>{ user.first_name + " " + user.last_name }</Link>
-              ))
-            ) : ( <p>No users</p> )
-          }
-        </ul>
+      <div className="m-5">
+        <h1 className="text-center text-primary">Users</h1>
+        <hr/>
+        {
+          (users) ? (
+            <div className="row justify-content-center">
+              <div className="col-12 col-sm-10 col-md-6">
+                <ul className="list-group">
+                  {
+                    users.map(user => {
+                      return (
+                        <li className="list-group-item d-flex" key={user._id}>
+                          <div className="mr-auto">
+                            { user.name }
+                          </div>
+                        
+                          <div className="btn-group">
+                            {/* view profile button */}
+                            <button type="button" className="btn btn-light py-1" data-toggle="tooltip" data-placement="top" title="View Profile" onClick={ () => goToProfilePage(user._id) }><i className="fa fa-id-card text-info"></i></button>
+                            {/* edit profile button */}
+                            <button type="button" className="btn btn-light py-1" data-toggle="tooltip" data-placement="top" title="Edit Profile" onClick={ () => goToEditPage(user._id) }><i className="fa fa-pencil"></i></button>
+                            {/* delete user button */}
+                            <button type="button" className="btn btn-light py-1" data-toggle="tooltip" data-placement="top" title="Delete User" onClick={ () => handleDelete(user._id) }><i className="fa fa-trash text-danger"></i></button>
+                          </div>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
+              </div>
+            </div>
+          ) : (<p>No users found</p>)
+        }
       </div>
     </>
   )
