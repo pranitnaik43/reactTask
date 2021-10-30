@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router";
-import info from "../info";
 
 const UsersView = () => {
 
@@ -18,7 +17,7 @@ const UsersView = () => {
         "gender": "personGender",
         "email": "internetEmail",
         "phone": "phoneMobile",
-        "_repeat": 5
+        "_repeat": 10
       }
     }
 

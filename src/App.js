@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Nav from './Components/Nav';
 import UsersView from './Components/UsersView';
-import { UsersContext } from './context';
 import About from './Components/About';
 import UserProfile from './Components/UserProfile';
 import EditProfile from './Components/EditProfile';
@@ -13,7 +12,6 @@ function App() {
     <>
     <BrowserRouter>
       <Nav />
-      <UsersContext.Provider value={{}}>
         <Switch>
           <Route path="/about" component={ About }></Route>
           <Route exact path="/users" component={ UsersView }></Route>
@@ -24,7 +22,6 @@ function App() {
             <Redirect to="/users"></Redirect>
           </Route>
         </Switch>
-      </UsersContext.Provider>
     </BrowserRouter>
     </>
   );

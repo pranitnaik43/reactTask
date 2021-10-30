@@ -1,5 +1,4 @@
 import UserForm from "./UserForm";
-import info from "../info";
 
 const CreateUser = () => {
   return ( 

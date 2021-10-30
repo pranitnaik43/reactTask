@@ -2,7 +2,6 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import UserForm from "./UserForm";
-import info from "../info";
 
 const EditProfile = () => {
 
@@ -43,7 +42,7 @@ const EditProfile = () => {
           targetURL -> The URL to be hit for saving data
           nextURL -> redirect to this URL after submission of form
         */}
-        <UserForm userData={user} submitMethod={"PUT"} targetURL={process.env.REACT_APP_SERVER_URL+ + "/users/" + userId} nextURL={"/users/view/"+userId}/>
+        <UserForm userData={user} submitMethod={"PUT"} targetURL={process.env.REACT_APP_SERVER_URL+ "/users/" + userId} nextURL={"/users/view/"+userId}/>
       </div>
     </>
   );
