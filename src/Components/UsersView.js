@@ -7,45 +7,8 @@ const UsersView = () => {
   const [users, setUsers] = useState(null);
   const history = useHistory();
 
-  async function loadData() {
-    // following is the template for getting fake data
-    var data = {
-      "token": process.env.REACT_APP_FAKEJSON_ACCESS_TOKEN,
-      "data": {
-        "name": "nameFirst",
-        "age": "numberInt|16,60",
-        "gender": "personGender",
-        "email": "internetEmail",
-        "phone": "phoneMobile",
-        "_repeat": 10
-      }
-    }
-
-    var config = {
-      method: "post",
-      url: "https://app.fakejson.com/q",
-      headers: {
-        'content-type': 'application/json'
-      },
-      data: JSON.stringify(data),
-    }
-
-    const response = await axios(config); 
-    const fakeUsers = response.data;
-
-    config.url = process.env.REACT_APP_SERVER_URL+"/users/create";
-    config.method = "POST";
-    console.log(fakeUsers)
-    for(var user of fakeUsers) {
-        config.data = user;
-        // console.log(config);
-        await axios(config);
-    }
-  }
-
   useEffect(() => {
     //ComponentDidMount
-    // loadData();  //load initial data
     var config = {
       url: process.env.REACT_APP_SERVER_URL+"/users",
       method: "GET",
