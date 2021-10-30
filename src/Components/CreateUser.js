@@ -12,7 +12,7 @@ const CreateUser = () => {
           targetURL -> The URL to be hit for saving data
           nextURL -> redirect to this URL after submission of form
         */}
-        <UserForm user={null} submitMethod={"POST"} targetURL={process.env.REACT_APP_SERVER_URL+ + "/users/create"} nextURL={"/users"}/>
+        <UserForm user={null} submitMethod={"POST"} targetURL={process.env.REACT_APP_SERVER_URL + "/users/create"} nextURL={"/users"}/>
       </div>
     </>
   );
